@@ -1,24 +1,25 @@
 {
     "name": "@intzaaa/pureact",
     "private": false,
-    "version": "0.0.1",
+    "version": "1.0.0",
     "main": "./src/index.ts",
     "license": "AGPL-3.0-only",
     "packageManager": "pnpm@10.8.1",
     "devDependencies": {
+        "preact": "^10.26.5",
         "prettier": "^3.5.3",
         "tsx": "^4.19.3",
         "typescript": "^5.8.3"
     },
-    "peerDependencies": {
-        "preact": ">=10"
+    "dependencies": {
+        "@preact/signals": "^2.0.4"
     },
+    "files": [
+        "src"
+    ],
     "exports": {
         ".": {
             "import": "./src/index.ts"
         }
-    },
-    "files": [
-        "src"
-    ]
+    }
 }
