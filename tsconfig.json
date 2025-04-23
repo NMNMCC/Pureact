@@ -1,8 +1,6 @@
 {
     "include": ["./src/**/*"],
     "compilerOptions": {
-        "plugins": [{ "transform": "ts-runtime-checks" }],
-
         /* Visit https://aka.ms/tsconfig to read more about this file */
 
         "jsx": "react-jsx",

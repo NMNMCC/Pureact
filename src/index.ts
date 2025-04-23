@@ -1,5 +1,13 @@
 import type { JSX } from "preact/compat";
-import { type Signal, useSignal } from "@preact/signals";
+import type { Signal } from "@preact/signals";
+
+const { useSignal } = await (async () => {
+    try {
+        return await import("@preact/signals");
+    } catch (e) {
+        return await import("@preact/signals-react");
+    }
+})();
 
 export const none = Symbol("none");
 export type None = typeof none;
