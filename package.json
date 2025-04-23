@@ -2,7 +2,7 @@
     "name": "@intzaaa/pureact",
     "type": "module",
     "private": false,
-    "version": "2.0.1",
+    "version": "2.1.0",
     "license": "AGPL-3.0-only",
     "packageManager": "pnpm@10.8.1",
     "devDependencies": {
@@ -29,6 +29,6 @@
         }
     },
     "scripts": {
-        "build": "tsup --entry.index ./src/index.ts --entry.examples ./src/examples/index.ts --dts --format esm --clean --out-dir dist --minify --sourcemap"
+        "build": "tsup ./src/index.ts --external react --dts --format esm --clean --out-dir dist"
     }
 }
