@@ -9,22 +9,22 @@ export type Effect<A extends object = object> = ReturnType<Update<A>>;
 export type Update<A extends object = object> = (
     set: Signal<A>,
 ) => <E extends any[]>(
-    fn: (...e: E) => Sometime<Option<A>>,
+    fn: (...args: E) => Sometime<Option<A>>,
 ) => (...e: E) => void;
 export type Component = <
-    A extends object,
+    I extends object,
     E extends object = {},
     R extends JSX.Element = JSX.Element,
 >(
-    init: A,
-    fn: (args: A & E & { effect: Effect<A> }) => R,
+    internals: I,
+    fn: (internals: I & E & { effect: Effect<I> }) => R,
 ) => (externals: E) => R;
 
-export const update: Update =
+const update: Update =
     (_) =>
     (fn) =>
-    async (...e) => {
-        const result = await fn(...e);
+    async (...args) => {
+        const result = await fn(...args);
 
         if (result !== none) {
             _.value = result;
@@ -33,8 +33,8 @@ export const update: Update =
         return;
     };
 
-export const component: Component = (init, fn) => (externals) => {
-    const _ = useSignal(init);
+export const component: Component = (internals, fn) => (externals) => {
+    const _ = useSignal(internals);
 
     return fn({ ..._.value, ...externals, effect: update(_) });
 };
