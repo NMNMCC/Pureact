@@ -2,7 +2,6 @@ import { component, none, type Option } from "..";
 
 type Data = {
     data: Option<string>;
-    loading: boolean;
     error: Option<string>;
 };
 
@@ -19,26 +18,26 @@ const api = (): Promise<{ data: string } | { error: string }> =>
         }, 1500);
     });
 
+const fetchData = async (data: Data): Promise<Data> => {
+    const res = await api();
+
+    if ("error" in res) {
+        return { ...data, error: res.error };
+    }
+
+    return { ...data, data: res.data };
+};
+
 export const Fetcher = component<Data>(
-    { data: none, loading: false, error: none },
-    ({ data, loading, error, effect: $ }) => {
-        const fetchData = $(() => {
-            // Make request
-            api().then((result) => {
-                if ("data" in result) {
-                    return { data: result.data, loading: false, error: none };
-                } else {
-                    return { data: none, loading: false, error: result.error };
-                }
-            });
-
-            // Return loading state immediately
-            return { data: none, loading: true, error: none };
-        });
-
+    { data: none, error: none },
+    ({ data, error, effect: $ }) => {
+        const loading = data === none && error === none;
         return (
             <div>
-                <button onClick={fetchData} disabled={loading}>
+                <button
+                    onClick={$(() => fetchData({ data, error }))}
+                    disabled={loading}
+                >
                     {loading ? "Loading..." : "Fetch Data"}
                 </button>
                 {error !== none && (
