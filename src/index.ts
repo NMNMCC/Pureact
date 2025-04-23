@@ -1,6 +1,6 @@
-import { type Dispatch, type JSX } from "preact/compat";
-import { type StateUpdater } from "preact/hooks";
-import { useState } from "preact/compat";
+import type { Dispatch, JSX } from "preact/compat";
+import type { StateUpdater } from "preact/hooks";
+import { useState } from "react";
 
 export const none = Symbol("none");
 export type None = typeof none;
