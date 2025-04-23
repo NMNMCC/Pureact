@@ -1,27 +1,21 @@
-import type { JSX } from "preact/compat";
-import type { Signal } from "@preact/signals";
-
-const { useSignal } = await (async () => {
-    try {
-        return await import("@preact/signals");
-    } catch (e) {
-        return await import("@preact/signals-react");
-    }
-})();
+import { type Dispatch, type JSX } from "preact/compat";
+import { type StateUpdater } from "preact/hooks";
+import { useState } from "preact/compat";
 
 export const none = Symbol("none");
 export type None = typeof none;
 export type Option<Value> = None | Value;
 export type Sometime<T> = T | Promise<T>;
-export type Effect<A extends object = object> = ReturnType<Update<A>>;
-export type Update<A extends object = object> = (
-    set: Signal<A>,
+export type Data = Record<string, unknown>;
+export type Effect<A extends Data = Data> = ReturnType<Update<A>>;
+export type Update<A extends Data = Data> = <T extends A>(
+    set: Dispatch<StateUpdater<T>>,
 ) => <E extends any[]>(
-    fn: (...args: E) => Sometime<Option<A>>,
+    fn: (...args: E) => Sometime<Option<T>>,
 ) => (...e: E) => void;
 export type Component = <
-    I extends object,
-    E extends object = {},
+    I extends Data,
+    E extends Data = {},
     R extends JSX.Element = JSX.Element,
 >(
     internals: I,
@@ -29,20 +23,20 @@ export type Component = <
 ) => (externals: E) => R;
 
 const update: Update =
-    (_) =>
+    (set) =>
     (fn) =>
     async (...args) => {
         const result = await fn(...args);
 
         if (result !== none) {
-            _.value = result;
+            set(result);
         }
 
         return;
     };
 
 export const component: Component = (internals, fn) => (externals) => {
-    const _ = useSignal(internals);
+    const [_, set] = useState(internals);
 
-    return fn({ ..._.value, ...externals, effect: update(_) });
+    return fn({ ..._, ...externals, effect: update(set) });
 };

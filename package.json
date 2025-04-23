@@ -2,26 +2,33 @@
     "name": "@intzaaa/pureact",
     "type": "module",
     "private": false,
-    "version": "1.1.1",
+    "version": "2.0.0",
     "license": "AGPL-3.0-only",
     "packageManager": "pnpm@10.8.1",
     "devDependencies": {
-        "@preact/signals": ">=2",
         "preact": "^10.26.5",
         "prettier": "^3.5.3",
         "tsup": "^8.4.0",
         "tsx": "^4.19.3",
         "typescript": "^5.8.3"
     },
+    "imports": {
+        "#react": "preact/compat",
+        "#react-dom": "preact/compat"
+    },
     "peerDependencies": {
-        "@preact/signals": ">=2",
-        "@preact/signals-react": ">=2"
+        "react": ">=18",
+        "react-dom": ">=18",
+        "preact": ">=10"
     },
     "peerDependenciesMeta": {
-        "@preact/signals": {
+        "react": {
             "optional": true
         },
-        "@preact/signals-react": {
+        "react-dom": {
+            "optional": true
+        },
+        "preact": {
             "optional": true
         }
     },

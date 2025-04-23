@@ -1,32 +1,26 @@
 import { component } from "..";
 
-// Internal state
 type Data = {
-    clickCount: number;
+    count: number;
 };
 
-// External props passed to the component
 type Externals = {
     name: string;
 };
 
-export const Greeter = component<Data, Externals>(
-    // Initial internal state
-    { clickCount: 0 },
-    // Component function receiving internal state, external props, and effect function
-    ({ clickCount, name, effect: $ }) => {
-        // Effect to update internal state
-        const handleClick = $(() => ({
-            clickCount: clickCount + 1,
-        }));
+const click = (data: Data) => ({
+    ...data,
+    count: data.count + 1,
+});
 
+export const Greeter = component<Data, Externals>(
+    { count: 0 },
+    ({ effect: $, ...data }) => {
         return (
             <div>
-                {/* Use external prop 'name' */}
-                <h1>Hello, {name}!</h1>
-                {/* Use internal state 'clickCount' */}
-                <p>You clicked the button {clickCount} times.</p>
-                <button onClick={handleClick}>Click Me</button>
+                <h1>Hello, {data.name}!</h1>
+                <p>You clicked the button {data.count} times.</p>
+                <button onClick={$(() => click(data))}>Click Me</button>
             </div>
         );
     },
