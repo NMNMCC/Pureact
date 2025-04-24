@@ -1,11 +1,12 @@
-import { component } from "..";
+import type { JSX } from "preact/jsx-runtime";
+import { component, type Option } from "..";
 
-type Data = {
+type Internals = {
     todos: string[];
     newTodo: string;
 };
 
-const add = (data: Data) => () => {
+const add = (data: Internals) => (): Option<Internals> => {
     if (data.newTodo.trim() === "") return;
     return {
         todos: [...data.todos, data.newTodo],
@@ -13,38 +14,31 @@ const add = (data: Data) => () => {
     };
 };
 
-const remove = (data: Data, index: number) => () => ({
+const remove = (data: Internals, index: number) => (): Internals => ({
     ...data,
     todos: data.todos.filter((_, i) => i !== index),
 });
 
-const input = (data: Data, value: string) => ({
-    ...data,
-    newTodo: value,
-});
+const input =
+    (data: Internals) =>
+    (e: JSX.TargetedInputEvent<HTMLInputElement>): Internals => ({
+        ...data,
+        newTodo: e.currentTarget.value,
+    });
 
-export const Todo = component<Data>(
-    { todos: [], newTodo: "" },
-    ({ effect: $, ...data }) => {
-        return (
-            <div>
-                <input
-                    type="text"
-                    value={data.newTodo}
-                    onInput={$((e) => input(data, e.currentTarget.value))}
-                />
-                <button onClick={$(add(data))}>Add Todo</button>
-                <ul>
-                    {data.todos.map((todo, index) => (
-                        <li key={index}>
-                            {todo}
-                            <button onClick={$(remove(data, index))}>
-                                Remove
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
-    },
-);
+export const Todo = component<Internals>({ todos: [], newTodo: "" }, ($, internals) => {
+    return (
+        <div>
+            <input type="text" value={internals.newTodo} onInput={$(input(internals))} />
+            <button onClick={$(add(internals))}>Add Todo</button>
+            <ul>
+                {internals.todos.map((todo, index) => (
+                    <li key={index}>
+                        {todo}
+                        <button onClick={$(remove(internals, index))}>Remove</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+});

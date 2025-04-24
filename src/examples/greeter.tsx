@@ -1,6 +1,6 @@
 import { component } from "..";
 
-type Data = {
+type Internals = {
     count: number;
 };
 
@@ -8,19 +8,16 @@ type Externals = {
     name: string;
 };
 
-const click = (data: Data) => ({
+const click = (data: Internals) => (): Internals => ({
     count: data.count + 1,
 });
 
-export const Greeter = component<Data, Externals>(
-    { count: 0 },
-    ({ effect: $, ...data }) => {
-        return (
-            <div>
-                <h1>Hello, {data.name}!</h1>
-                <p>You clicked the button {data.count} times.</p>
-                <button onClick={$(() => click(data))}>Click Me</button>
-            </div>
-        );
-    },
-);
+export const Greeter = component<Internals, Externals>({ count: 0 }, ($, internals, { name }) => {
+    return (
+        <div>
+            <h1>Hello, {name}!</h1>
+            <p>You clicked the button {internals.count} times.</p>
+            <button onClick={$(click(internals))}>Click Me</button>
+        </div>
+    );
+});

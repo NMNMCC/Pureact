@@ -9,16 +9,10 @@ export type Data = Record<string, unknown>;
 export type Effect<A extends Data = Data> = ReturnType<Update<A>>;
 export type Update<A extends Data = Data> = <T extends A>(
     set: Dispatch<StateUpdater<T>>,
-) => <E extends any[]>(
-    fn: (...args: E) => Sometime<Option<T>>,
-) => (...e: E) => void;
-export type Component = <
-    I extends Data,
-    E extends Data = {},
-    R extends JSX.Element = JSX.Element,
->(
+) => <E extends any[]>(fn: (...args: E) => Sometime<Option<T>>) => (...e: E) => void;
+export type Component = <I extends Data, E extends Data = {}, R extends JSX.Element = JSX.Element>(
     internals: I,
-    fn: (internals: I & E & { effect: Effect<I> }) => R,
+    fn: (effect: Effect<I>, internals: I, externals: E) => R,
 ) => (externals: E) => R;
 
 const update: Update =
@@ -32,5 +26,5 @@ const update: Update =
 export const component: Component = (internals, fn) => (externals) => {
     const [_, set] = useState(internals);
 
-    return fn({ ..._, ...externals, effect: update(set) });
+    return fn(update(set), internals, externals);
 };

@@ -1,6 +1,6 @@
 import { component, type Option } from "..";
 
-type Data = {
+type Internals = {
     data: Option<string>;
     error: Option<string>;
 };
@@ -18,7 +18,7 @@ const api = (): Promise<{ data: string } | { error: string }> =>
         }, 1500);
     });
 
-const tryFetch = async (): Promise<Data> => {
+const tryFetch = async (): Promise<Internals> => {
     const res = await api();
 
     if ("error" in res) return { data: undefined, error: res.error };
@@ -26,18 +26,15 @@ const tryFetch = async (): Promise<Data> => {
     return { error: undefined, data: res.data };
 };
 
-export const Fetcher = component<Data>(
-    { data: undefined, error: undefined },
-    ({ data, error, effect: $ }) => {
-        const loading = !(data && error);
-        return (
-            <div>
-                <button onClick={$(tryFetch)} disabled={loading}>
-                    {loading ? "Loading..." : "Fetch Data"}
-                </button>
-                {error && <p style={{ color: "red" }}>Error: {error}</p>}
-                {data && <p>Received: {data}</p>}
-            </div>
-        );
-    },
-);
+export const Fetcher = component<Internals>({ data: undefined, error: undefined }, ($, internals) => {
+    const loading = !(internals.data && internals.error);
+    return (
+        <div>
+            <button onClick={$(tryFetch)} disabled={loading}>
+                {loading ? "Loading..." : "Fetch Data"}
+            </button>
+            {internals.error && <p style={{ color: "red" }}>Error: {internals.error}</p>}
+            {internals.data && <p>Received: {internals.data}</p>}
+        </div>
+    );
+});
