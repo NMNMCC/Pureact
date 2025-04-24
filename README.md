@@ -1,18 +1,27 @@
 # Pureact
 
-"Pure" Preact/React.
+**Component. State. Redefined.**
 
 ```jsx
-type Data = {
+import { component } from "..";
+
+type Internals = {
     count: number;
 };
 
-export const Counter = component<Data>({ count: 0 }, ({ count, effect: $ }) => {
+const decrement = (data: Internals) => (): Internals => ({
+    count: data.count - 1,
+});
+const increment = (data: Internals) => (): Internals => ({
+    count: data.count + 1,
+});
+
+export const Counter = component<Internals>({ count: 0 }, ($, internals) => {
     return (
         <>
-            <button onClick={$(() => ({ count: count - 1 }))}>-1</button>
-            <p> {count} </p>
-            <button onClick={$(() => ({ count: count + 1 }))}>+1</button>
+            <button onClick={$(decrement(internals))}>-1</button>
+            <p> {internals.count} </p>
+            <button onClick={$(increment(internals))}>+1</button>
         </>
     );
 });
