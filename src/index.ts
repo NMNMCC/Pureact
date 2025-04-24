@@ -26,5 +26,5 @@ const update: Update =
 export const component: Component = (internals, fn) => (externals) => {
     const [_, set] = useState(internals);
 
-    return fn(update(set), internals, externals);
+    return fn(update(set), _, externals);
 };
