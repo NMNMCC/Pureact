@@ -2,8 +2,7 @@ import type { Dispatch, JSX } from "preact/compat";
 import type { StateUpdater } from "preact/hooks";
 import { useState } from "react";
 
-export const none = Symbol("none");
-export type None = typeof none;
+export type None = undefined;
 export type Option<Value> = None | Value;
 export type Sometime<T> = T | Promise<T>;
 export type Data = Record<string, unknown>;
@@ -27,12 +26,7 @@ const update: Update =
     (fn) =>
     async (...args) => {
         const result = await fn(...args);
-
-        if (result !== none) {
-            set(result);
-        }
-
-        return;
+        if (result !== undefined) set(result);
     };
 
 export const component: Component = (internals, fn) => (externals) => {

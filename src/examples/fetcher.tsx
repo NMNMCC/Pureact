@@ -1,4 +1,4 @@
-import { component, none, type Option } from "..";
+import { component, type Option } from "..";
 
 type Data = {
     data: Option<string>;
@@ -18,32 +18,25 @@ const api = (): Promise<{ data: string } | { error: string }> =>
         }, 1500);
     });
 
-const fetchData = async (data: Data): Promise<Data> => {
+const tryFetch = async (): Promise<Data> => {
     const res = await api();
 
-    if ("error" in res) {
-        return { ...data, error: res.error };
-    }
+    if ("error" in res) return { data: undefined, error: res.error };
 
-    return { ...data, data: res.data };
+    return { error: undefined, data: res.data };
 };
 
 export const Fetcher = component<Data>(
-    { data: none, error: none },
+    { data: undefined, error: undefined },
     ({ data, error, effect: $ }) => {
-        const loading = data === none && error === none;
+        const loading = !(data && error);
         return (
             <div>
-                <button
-                    onClick={$(() => fetchData({ data, error }))}
-                    disabled={loading}
-                >
+                <button onClick={$(tryFetch)} disabled={loading}>
                     {loading ? "Loading..." : "Fetch Data"}
                 </button>
-                {error !== none && (
-                    <p style={{ color: "red" }}>Error: {error}</p>
-                )}
-                {data !== none && <p>Received: {data}</p>}
+                {error && <p style={{ color: "red" }}>Error: {error}</p>}
+                {data && <p>Received: {data}</p>}
             </div>
         );
     },

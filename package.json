@@ -2,17 +2,17 @@
     "name": "@intzaaa/pureact",
     "type": "module",
     "private": false,
-    "version": "2.1.2",
+    "version": "2.2.0",
     "license": "AGPL-3.0-only",
     "packageManager": "pnpm@10.8.1",
     "devDependencies": {
         "preact": "^10.26.5",
         "prettier": "^3.5.3",
+        "react": "npm:@preact/compat",
+        "react-dom": "npm:@preact/compat",
         "tsup": "^8.4.0",
         "tsx": "^4.19.3",
-        "typescript": "^5.8.3",
-        "react": "npm:@preact/compat",
-        "react-dom": "npm:@preact/compat"
+        "typescript": "^5.8.3"
     },
     "files": [
         "dist",
@@ -28,6 +28,6 @@
         }
     },
     "scripts": {
-        "build": "tsup ./src/index.ts --external react --dts --format esm --clean --out-dir dist"
+        "build": "tsup ./src/index.ts --external react --dts --format esm --target es2021 --clean --out-dir dist"
     }
 }

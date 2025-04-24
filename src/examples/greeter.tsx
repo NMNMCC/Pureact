@@ -9,7 +9,6 @@ type Externals = {
 };
 
 const click = (data: Data) => ({
-    ...data,
     count: data.count + 1,
 });
 

@@ -5,15 +5,15 @@ type Data = {
     newTodo: string;
 };
 
-const add = (data: Data) => {
-    if (data.newTodo.trim() === "") return data;
+const add = (data: Data) => () => {
+    if (data.newTodo.trim() === "") return;
     return {
         todos: [...data.todos, data.newTodo],
         newTodo: "",
     };
 };
 
-const remove = (data: Data, index: number) => ({
+const remove = (data: Data, index: number) => () => ({
     ...data,
     todos: data.todos.filter((_, i) => i !== index),
 });
@@ -25,29 +25,20 @@ const input = (data: Data, value: string) => ({
 
 export const Todo = component<Data>(
     { todos: [], newTodo: "" },
-    ({ todos, newTodo, effect: $ }) => {
+    ({ effect: $, ...data }) => {
         return (
             <div>
                 <input
                     type="text"
-                    value={newTodo}
-                    onInput={$((e) =>
-                        input({ todos, newTodo }, e.currentTarget.value),
-                    )}
+                    value={data.newTodo}
+                    onInput={$((e) => input(data, e.currentTarget.value))}
                 />
-                <button onClick={$(() => add({ todos, newTodo }))}>
-                    Add Todo
-                </button>
+                <button onClick={$(add(data))}>Add Todo</button>
                 <ul>
-                    {todos.map((todo, index) => (
+                    {data.todos.map((todo, index) => (
                         <li key={index}>
                             {todo}
-                            <button
-                                onClick={$(() =>
-                                    remove({ todos, newTodo }, index),
-                                )}
-                                style={{ marginLeft: "8px" }}
-                            >
+                            <button onClick={$(remove(data, index))}>
                                 Remove
                             </button>
                         </li>
