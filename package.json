@@ -2,14 +2,14 @@
     "name": "@intzaaa/pureact",
     "type": "module",
     "private": false,
-    "version": "3.0.2",
+    "version": "3.1.0",
     "license": "AGPL-3.0-only",
     "packageManager": "pnpm@10.8.1",
     "devDependencies": {
-        "preact": "^10.26.5",
+        "@types/react": "^19.1.2",
         "prettier": "^3.5.3",
-        "react": "npm:@preact/compat",
-        "react-dom": "npm:@preact/compat",
+        "react": "18.3.1",
+        "react-dom": "18",
         "tsup": "^8.4.0",
         "tsx": "^4.19.3",
         "typescript": "^5.8.3"

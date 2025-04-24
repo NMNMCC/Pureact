@@ -1,4 +1,4 @@
-import type { JSX } from "preact/jsx-runtime";
+import type React from "react";
 import { component, type Option } from "..";
 
 type Internals = {
@@ -21,7 +21,7 @@ const remove = (data: Internals, index: number) => (): Internals => ({
 
 const input =
     (data: Internals) =>
-    (e: JSX.TargetedInputEvent<HTMLInputElement>): Internals => ({
+    (e: React.FormEvent<HTMLInputElement>): Internals => ({
         ...data,
         newTodo: e.currentTarget.value,
     });

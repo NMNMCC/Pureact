@@ -1,5 +1,4 @@
-import type { Dispatch, JSX } from "preact/compat";
-import type { StateUpdater } from "preact/hooks";
+import type React from "react";
 import { useState } from "react";
 
 export type None = undefined;
@@ -8,9 +7,9 @@ export type Sometime<T> = T | Promise<T>;
 export type Data = Record<string, unknown>;
 export type Effect<A extends Data = Data> = ReturnType<Update<A>>;
 export type Update<A extends Data = Data> = <T extends A>(
-    set: Dispatch<StateUpdater<T>>,
+    set: React.Dispatch<React.SetStateAction<T>>,
 ) => <E extends any[]>(fn: (...args: E) => Sometime<Option<T>>) => (...e: E) => void;
-export type Component = <I extends Data, E extends Data = {}, R extends JSX.Element = JSX.Element>(
+export type Component = <I extends Data, E extends Data = {}, R extends React.JSX.Element = React.JSX.Element>(
     internals: I,
     fn: (effect: Effect<I>, internals: I, externals: E) => R,
 ) => (externals: E) => R;
