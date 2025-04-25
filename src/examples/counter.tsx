@@ -1,22 +1,22 @@
 import { component } from "..";
 
-type Internals = {
+type Internal = {
     count: number;
 };
 
-const decrement = (data: Internals) => (): Internals => ({
+const decrement = (data: Internal) => (): Internal => ({
     count: data.count - 1,
 });
-const increment = (data: Internals) => (): Internals => ({
+const increment = (data: Internal) => (): Internal => ({
     count: data.count + 1,
 });
 
-export const Counter = component<Internals>({ count: 0 }, ($, internals) => {
+export const Counter = component<Internal>({ count: 0 }, ($, internal) => {
     return (
         <>
-            <button onClick={$(decrement(internals))}>-1</button>
-            <p> {internals.count} </p>
-            <button onClick={$(increment(internals))}>+1</button>
+            <button onClick={$(decrement(internal))}>-1</button>
+            <p> {internal.count} </p>
+            <button onClick={$(increment(internal))}>+1</button>
         </>
     );
 });

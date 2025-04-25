@@ -1,23 +1,23 @@
 import { component } from "..";
 
-type Internals = {
+type Internal = {
     count: number;
 };
 
-type Externals = {
+type External = {
     name: string;
 };
 
-const click = (data: Internals) => (): Internals => ({
+const click = (data: Internal) => (): Internal => ({
     count: data.count + 1,
 });
 
-export const Greeter = component<Internals, Externals>({ count: 0 }, ($, internals, { name }) => {
+export const Greeter = component<Internal, External>({ count: 0 }, ($, internal, { name }) => {
     return (
         <div>
             <h1>Hello, {name}!</h1>
-            <p>You clicked the button {internals.count} times.</p>
-            <button onClick={$(click(internals))}>Click Me</button>
+            <p>You clicked the button {internal.count} times.</p>
+            <button onClick={$(click(internal))}>Click Me</button>
         </div>
     );
 });

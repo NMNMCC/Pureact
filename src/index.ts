@@ -10,9 +10,9 @@ export type Update<A extends Data = Data> = <T extends A>(
     set: React.Dispatch<React.SetStateAction<T>>,
 ) => <E extends any[]>(fn: (...args: E) => Sometime<Option<T>>) => (...e: E) => void;
 export type Component = <I extends Data, E extends Data = {}, R extends React.JSX.Element = React.JSX.Element>(
-    internals: I,
-    fn: (effect: Effect<I>, internals: I, externals: E) => R,
-) => (externals: E) => R;
+    internal: I,
+    fn: (effect: Effect<I>, internal: I, external: E) => R,
+) => (external: E) => R;
 
 const update: Update =
     (set) =>
@@ -22,8 +22,8 @@ const update: Update =
         if (result !== undefined) set(result);
     };
 
-export const component: Component = (internals, fn) => (externals) => {
-    const [_, set] = useState(internals);
+export const component: Component = (internal, fn) => (external) => {
+    const [_, set] = useState(internal);
 
-    return fn(update(set), _, externals);
+    return fn(update(set), _, external);
 };

@@ -1,12 +1,12 @@
 import type React from "react";
 import { component, type Option } from "..";
 
-type Internals = {
+type Internal = {
     todos: string[];
     newTodo: string;
 };
 
-const add = (data: Internals) => (): Option<Internals> => {
+const add = (data: Internal) => (): Option<Internal> => {
     if (data.newTodo.trim() === "") return;
     return {
         todos: [...data.todos, data.newTodo],
@@ -14,28 +14,28 @@ const add = (data: Internals) => (): Option<Internals> => {
     };
 };
 
-const remove = (data: Internals, index: number) => (): Internals => ({
+const remove = (data: Internal, index: number) => (): Internal => ({
     ...data,
     todos: data.todos.filter((_, i) => i !== index),
 });
 
 const input =
-    (data: Internals) =>
-    (e: React.FormEvent<HTMLInputElement>): Internals => ({
+    (data: Internal) =>
+    (e: React.FormEvent<HTMLInputElement>): Internal => ({
         ...data,
         newTodo: e.currentTarget.value,
     });
 
-export const Todo = component<Internals>({ todos: [], newTodo: "" }, ($, internals) => {
+export const Todo = component<Internal>({ todos: [], newTodo: "" }, ($, internal) => {
     return (
         <div>
-            <input type="text" value={internals.newTodo} onInput={$(input(internals))} />
-            <button onClick={$(add(internals))}>Add Todo</button>
+            <input type="text" value={internal.newTodo} onInput={$(input(internal))} />
+            <button onClick={$(add(internal))}>Add Todo</button>
             <ul>
-                {internals.todos.map((todo, index) => (
+                {internal.todos.map((todo, index) => (
                     <li key={index}>
                         {todo}
-                        <button onClick={$(remove(internals, index))}>Remove</button>
+                        <button onClick={$(remove(internal, index))}>Remove</button>
                     </li>
                 ))}
             </ul>
